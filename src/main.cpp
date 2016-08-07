@@ -10,8 +10,23 @@
 // How many NeoPixels are attached to the Arduino?
 #define NUMPIXELS 1
 Adafruit_NeoPixel pixels = Adafruit_NeoPixel(1, PIN, NEO_GRB + NEO_KHZ800);
-
-
+unsigned short bright = 8;
+void setWhite() {
+  pixels.setPixelColor(0, pixels.Color(bright, bright, bright++));
+  pixels.show();
+}
+void setR() {
+  pixels.setPixelColor(0, pixels.Color(bright++,0,0));
+  pixels.show();
+}
+void setG() {
+  pixels.setPixelColor(0, pixels.Color(0, bright++,0));
+  pixels.show();
+}
+void setB() {
+  pixels.setPixelColor(0, pixels.Color(0,0,bright++));
+  pixels.show();
+}
 
 // from https://github.com/platformio/platformio-examples/tree/develop/espressif/esp8266-webserver
 
@@ -21,8 +36,10 @@ MDNSResponder mdns;
 
 ESP8266WebServer server(80);
 
+// The single colour LED on the CPU board
 const int led = LED_BUILTIN;
 
+// Not used (yet :) )
 void rgbLED()
 {
  int delayval = 500; // delay for half a second
@@ -44,14 +61,14 @@ void rgbLED()
 }
 
 void handleRoot() {
-  pixels.setPixelColor(0, pixels.Color(255,0,0));
+  setG();
   digitalWrite(led, 1);
   server.send(200, "text/plain", "hello from esp8266!");
   digitalWrite(led, 0);
 }
 
 void handleNotFound(){
-  pixels.setPixelColor(0, pixels.Color(0,255,0));
+  setR();
   digitalWrite(led, 1);
   String message = "File Not Found\n\n";
   message += "URI: ";
@@ -102,7 +119,7 @@ void setup(void){
 
   server.begin();
   Serial.println("HTTP server started");
-  pixels.setPixelColor(0, pixels.Color(0,0,255));
+  setWhite();
 }
 
 void loop(void){
