@@ -1,20 +1,20 @@
 
+#include "wemos/wemos.h"
 // Each of these is optional for the wemos target
 #include "wemos/oled.h"
 #include "wemos/rgbled.h"
 
 #include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <WiFiClient.h>
+//#include <ESP8266WiFi.h>
+//#include <WiFiClient.h>
 #include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
+//#include <ESP8266mDNS.h>
 
 
 // from https://github.com/platformio/platformio-examples/tree/develop/espressif/esp8266-webserver
 
 const char* ssid = "0722";
 const char* password = "Davisct440";
-MDNSResponder mdns;
 
 ESP8266WebServer server(80);
 
@@ -53,24 +53,10 @@ void setup(void){
 
   pinMode(led, OUTPUT);
   digitalWrite(led, 0);
+
   Serial.begin(115200);
-  WiFi.begin(ssid, password);
-  Serial.println("");
 
-  // Wait for connection
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(500);
-    Serial.print(".");
-  }
-  Serial.println("");
-  Serial.print("Connected to ");
-  Serial.println(ssid);
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-
-  if (mdns.begin("esp8266", WiFi.localIP())) {
-    Serial.println("MDNS responder started");
-  }
+  setupWIFI(ssid, password);
 
   server.on("/", handleRoot);
 
@@ -94,6 +80,6 @@ void setup(void){
 }
 
 void loop(void){
-  mdns.update();
+  updateWIFI();
   server.handleClient();
 }
