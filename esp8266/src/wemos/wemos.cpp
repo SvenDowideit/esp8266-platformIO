@@ -15,7 +15,7 @@ void setLED(unsigned short state) {
 }
 
 
-void seatupWIFI(const char *ssid, const char *password) {
+void setupWIFI(const char *ssid, const char *password) {
   WiFi.begin(ssid, password);
   Serial.println("");
   // Wait for connection
