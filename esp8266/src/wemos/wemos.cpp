@@ -5,6 +5,14 @@
 #include <ESP8266mDNS.h>
 
 MDNSResponder mdns;
+// The single colour LED on the CPU board
+const int led = LED_BUILTIN;
+void setupLED() {
+  pinMode(led, OUTPUT);
+}
+void setLED(unsigned short state) {
+  digitalWrite(led, state);
+}
 
 
 void seatupWIFI(const char *ssid, const char *password) {
@@ -23,7 +31,8 @@ void seatupWIFI(const char *ssid, const char *password) {
 
   if (mdns.begin("esp8266", WiFi.localIP())) {
     Serial.println("MDNS responder started");
-    MDNS.addService("www", "tcp", 80);
+    // look at http://bbs.espressif.com/viewtopic.php?t=485
+    MDNS.addService("http", "tcp", 80);
   }
 }
 
